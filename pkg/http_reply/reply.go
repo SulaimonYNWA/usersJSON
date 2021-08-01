@@ -22,12 +22,12 @@ type Options struct {
 	Accept         []string
 }
 
-func (re *replier) Reply(v interface{}, code int, w http.ResponseWriter, logError bool) {
+func (re *replier) Reply(v interface{}, code int, logError bool) {
 	re.setHeader()
 
 	b, err := json.Marshal(v)
 	if err != nil {
-		re.Error(err.Error(), http.StatusInternalServerError, w, logError)
+		re.Error(err.Error(), http.StatusInternalServerError, logError)
 		return
 	}
 
@@ -35,7 +35,7 @@ func (re *replier) Reply(v interface{}, code int, w http.ResponseWriter, logErro
 	re.opts.ResponseWriter.Write(b)
 }
 
-func (re *replier) Error(err string, code int, w http.ResponseWriter, logError bool) {
+func (re *replier) Error(err string, code int, logError bool) {
 	re.setHeader()
 	re.opts.ResponseWriter.WriteHeader(code)
 

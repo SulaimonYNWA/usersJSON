@@ -78,11 +78,12 @@ func main() {
 	// --------------------------------------------------------------------
 
 	var addr = fmt.Sprintf(":%d", cfg.Server.port)
+	log.Print("Server running on port ", cfg.Server.port)
+
 	err = http.ListenAndServe(addr, r)
 	if err != nil {
 		log.Print("http listen and serve: ", err.Error())
 		return
 	}
-	log.Print("Server running on port ", cfg.Server.port)
 
 }
