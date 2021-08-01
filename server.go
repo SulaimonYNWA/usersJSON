@@ -1,3 +1,5 @@
+// server.go initializes the database connection, the routes and starts the server on a specified port.
+
 package main
 
 import (
@@ -59,6 +61,7 @@ func main() {
 	// init models
 	userModel := user_model.NewModel(user_model.Options{DB: db})
 
+	// -------------------------------------------------------------------
 	// HTTP router
 	r := mux.NewRouter()
 
@@ -67,12 +70,19 @@ func main() {
 	r.HandleFunc("/users", (&controllers.UserController{UserModel: userModel}).GetAll).Methods("GET")
 	r.HandleFunc("/users/{id}", (&controllers.UserController{UserModel: userModel}).GetByID).Methods("GET")
 
+	// Health
 	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	}).Methods("GET")
 
-	log.Print("Starting server at port ", cfg.Server.port)
+	// --------------------------------------------------------------------
+
 	var addr = fmt.Sprintf(":%d", cfg.Server.port)
-	http.ListenAndServe(addr, r)
+	err = http.ListenAndServe(addr, r)
+	if err != nil {
+		log.Print("http listen and serve: ", err.Error())
+		return
+	}
+	log.Print("Server running on port ", cfg.Server.port)
 
 }
