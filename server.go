@@ -50,7 +50,7 @@ func dsn(cfg dbConfig) string {
 func main() {
 
 	// init database connection
-	log.Print("Starting mysql server at port ", cfg.Server.port)
+	log.Print("Starting mysql server at port ", cfg.DB.port)
 	db, err := sql.Open("mysql", dsn(cfg.DB))
 	if err != nil {
 		log.Printf("Open sql: %s\n", err)

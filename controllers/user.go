@@ -24,6 +24,7 @@ func (h UserController) AddUser(w http.ResponseWriter, req *http.Request) {
 		ContentType:    "application/json",
 		Accept:         []string{"application/json"},
 	})
+	setupResponse(&w, req)
 
 	defer req.Body.Close()
 	body, err := ioutil.ReadAll(req.Body)
@@ -57,6 +58,7 @@ func (h UserController) GetAll(w http.ResponseWriter, req *http.Request) {
 		ContentType:    "application/json",
 		Accept:         []string{"application/json"},
 	})
+	setupResponse(&w, req)
 
 	users, err := h.UserModel.GetAll()
 	if err != nil {
@@ -75,6 +77,7 @@ func (h UserController) GetByID(w http.ResponseWriter, req *http.Request) {
 		ContentType:    "application/json",
 		Accept:         []string{"application/json"},
 	})
+	setupResponse(&w, req)
 
 	// get id url parameter
 	userID, err := strconv.ParseInt(mux.Vars(req)["id"], 10, 64)
@@ -96,4 +99,10 @@ func (h UserController) GetByID(w http.ResponseWriter, req *http.Request) {
 	}
 
 	re.Reply(*user, http.StatusOK, false)
+}
+
+func setupResponse(w *http.ResponseWriter, req *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
