@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>REST API</title>
+  </head>
+  <style type="text/css">
+    .block {
+      padding: 5px;
+      margin: 5px;
+      border: grey 1px solid;
+      display: inline-block;
+    }
+    .user-block {
+      background-color: #fff0bf;
+    }
+    .admin-block {
+      background-color: #ced6ff;
+      font-weight: bold;
+    }
+  </style>
+
+  <body>
+    <button onclick="getUsers()">Fetch users from API endpoint</button>
+    <div id="data-container"></div>
+  </body>
+
+  <script type="text/javascript">
+    const apiHost = "http://127.0.0.1:3001";
+    var dataContainer = document.getElementById("data-container");
+
+    function getUsers() {
+      // clear container content
+      dataContainer.innerHTML = null;
+
+      // make an API request to get all users
+      fetch(apiHost + "/users")
+        // convert response to json object
+        .then((response) => response.json())
+        // user is a json object that was received
+        .then((users) => {
+          // iterate over users array to extract each user one by one
+          users.map((user) => {
+            // dinamically create an element
+            var container = document.createElement("div");
+            container.classList.add("block");
+
+            // apply classes depending on condition
+            user.IsAdmin
+              ? container.classList.add("admin-block")
+              : container.classList.add("user-block");
+
+            container.innerHTML += "<p> Name: " + user.Name + "</p>";
+            container.innerHTML += "<p> Age: " + user.Age + "</p>";
+            container.innerHTML += "<p> Email: " + user.Email + "</p>";
+
+            dataContainer.appendChild(container);
+          });
+        });
+    }
+  </script>
+</html>
